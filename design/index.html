@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QualityMind AI — Intelligent QA for Manufacturing</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Primary palette */
+      --color-midnight:   #0D1117;
+      --color-navy:       #0F2744;
+      --color-blue:       #1B4FD8;
+      --color-sky:        #38BDF8;
+      --color-slate:      #64748B;
+      --color-silver:     #CBD5E1;
+      --color-offwhite:   #F1F5F9;
+      --color-white:      #FFFFFF;
+
+      /* Accent */
+      --color-teal:       #0D9488;
+      --color-teal-light: #14B8A6;
+      --color-amber:      #F59E0B;
+
+      --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      --transition: 0.2s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-midnight);
+      color: var(--color-silver);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAVBAR ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      height: 68px;
+      background: rgba(13, 17, 23, 0.82);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.08);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--color-blue) 0%, var(--color-teal) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: white;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-logo-text {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--color-white);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-logo-text span {
+      color: var(--color-sky);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 7px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-silver);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: color var(--transition), background var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--color-white);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-ghost {
+      padding: 8px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-silver);
+      background: transparent;
+      border: 1px solid rgba(100,116,139,0.35);
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .btn-ghost:hover {
+      color: var(--color-white);
+      border-color: var(--color-sky);
+      background: rgba(56, 189, 248, 0.06);
+    }
+
+    .btn-primary {
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-white);
+      background: linear-gradient(135deg, var(--color-blue) 0%, var(--color-teal) 100%);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    /* ─── HERO ───────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 5vw 80px;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Subtle grid background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 0%, transparent 100%);
+    }
+
+    /* Glowing orbs */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    .hero-orb-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(27,79,216,0.22) 0%, transparent 70%);
+      top: -100px;
+      left: -150px;
+    }
+
+    .hero-orb-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(13,148,136,0.18) 0%, transparent 70%);
+      bottom: 0;
+      right: -100px;
+    }
+
+    .hero-orb-3 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(56,189,248,0.12) 0%, transparent 70%);
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px 5px 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      color: var(--color-sky);
+      background: rgba(56, 189, 248, 0.09);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--color-sky);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-headline {
+      font-size: clamp(40px, 5.5vw, 72px);
+      font-weight: 800;
+      line-height: 1.07;
+      letter-spacing: -1.5px;
+      color: var(--color-white);
+      margin-bottom: 24px;
+    }
+
+    .hero-headline .gradient-text {
+      background: linear-gradient(90deg, var(--color-sky) 0%, var(--color-teal-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 1.5vw, 20px);
+      line-height: 1.65;
+      color: var(--color-slate);
+      max-width: 620px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+
+    .btn-hero-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 30px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-white);
+      background: linear-gradient(135deg, var(--color-blue) 0%, var(--color-teal) 100%);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 0 40px rgba(27,79,216,0.35), 0 4px 16px rgba(0,0,0,0.3);
+      transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+    }
+
+    .btn-hero-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 60px rgba(27,79,216,0.5), 0 8px 24px rgba(0,0,0,0.35);
+    }
+
+    .btn-hero-primary svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn-hero-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-silver);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(100,116,139,0.3);
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .btn-hero-secondary:hover {
+      color: var(--color-white);
+      border-color: rgba(56,189,248,0.4);
+      background: rgba(56,189,248,0.05);
+    }
+
+    .btn-hero-secondary svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Social proof strip */
+    .hero-proof {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-slate);
+      margin-bottom: 60px;
+    }
+
+    .proof-avatars {
+      display: flex;
+    }
+
+    .proof-avatars span {
+      display: block;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--color-midnight);
+      margin-right: -8px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .proof-avatars span:nth-child(1) { background: #3B82F6; }
+    .proof-avatars span:nth-child(2) { background: #10B981; }
+    .proof-avatars span:nth-child(3) { background: #8B5CF6; }
+    .proof-avatars span:nth-child(4) { background: #F59E0B; }
+
+    .proof-stars {
+      color: var(--color-amber);
+      letter-spacing: 1px;
+    }
+
+    /* Hero dashboard mockup */
+    .hero-mockup {
+      position: relative;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .mockup-glow {
+      position: absolute;
+      inset: -2px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--color-blue), var(--color-teal));
+      opacity: 0.2;
+      filter: blur(20px);
+    }
+
+    .mockup-frame {
+      position: relative;
+      background: var(--color-navy);
+      border: 1px solid rgba(56,189,248,0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .mockup-topbar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(0,0,0,0.25);
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red   { background: #FF5F57; }
+    .dot-yellow{ background: #FFBD2E; }
+    .dot-green { background: #28CA41; }
+
+    .mockup-url-bar {
+      flex: 1;
+      margin: 0 16px;
+      height: 26px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+    }
+
+    .mockup-body {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 20px;
+      min-height: 380px;
+    }
+
+    .mockup-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sidebar-item {
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--color-slate);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .sidebar-item.active {
+      background: rgba(27,79,216,0.2);
+      color: var(--color-sky);
+      border: 1px solid rgba(27,79,216,0.3);
+    }
+
+    .sidebar-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      background: currentColor;
+      opacity: 0.5;
+    }
+
+    .sidebar-item.active .sidebar-icon {
+      opacity: 1;
+      background: var(--color-sky);
+    }
+
+    .mockup-main {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .stat-label {
+      font-size: 10.5px;
+      color: var(--color-slate);
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-white);
+      line-height: 1;
+    }
+
+    .stat-value.up   { color: var(--color-teal-light); }
+    .stat-value.warn { color: var(--color-amber); }
+
+    .stat-change {
+      font-size: 10px;
+      color: var(--color-teal-light);
+      margin-top: 4px;
+    }
+
+    .chart-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 16px;
+      flex: 1;
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .chart-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-silver);
+    }
+
+    .chart-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      background: rgba(13,148,136,0.2);
+      color: var(--color-teal-light);
+      border-radius: 99px;
+    }
+
+    /* Fake bar chart */
+    .fake-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 90px;
+    }
+
+    .bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, var(--color-blue), var(--color-teal));
+      opacity: 0.7;
+    }
+
+    .bar:nth-child(2n) { opacity: 0.4; }
+
+    /* Anomaly alerts row */
+    .alerts-row {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      font-size: 11px;
+    }
+
+    .alert-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .alert-dot.green  { background: var(--color-teal-light); }
+    .alert-dot.yellow { background: var(--color-amber); }
+    .alert-dot.red    { background: #EF4444; }
+
+    .alert-text { color: var(--color-silver); flex: 1; }
+    .alert-time { color: var(--color-slate); }
+
+    /* Stat card bottom accent */
+    .stat-card:nth-child(1) { border-top: 2px solid var(--color-teal-light); }
+    .stat-card:nth-child(2) { border-top: 2px solid var(--color-blue); }
+    .stat-card:nth-child(3) { border-top: 2px solid var(--color-amber); }
+    .stat-card:nth-child(4) { border-top: 2px solid var(--color-sky); }
+
+    /* ─── LOGOS STRIP ────────────────────────────────────────────── */
+    .logos-strip {
+      position: relative;
+      padding: 32px 5vw;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.01);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .logos-label {
+      font-size: 12px;
+      color: var(--color-slate);
+      margin-right: 16px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .logo-pill {
+      padding: 6px 18px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(203,213,225,0.45);
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ──────────────────────────────────────────────────── -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <span class="nav-logo-text">Quality<span>Mind</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#">Product</a></li>
+      <li><a href="#">Solutions</a></li>
+      <li><a href="#">Integrations</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Docs</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="#" class="btn-ghost">Sign in</a>
+      <a href="#" class="btn-primary">Get early access</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ───────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        AI-Powered Quality Intelligence — Now in Beta
+      </div>
+
+      <h1 class="hero-headline">
+        Catch defects before<br/>
+        they reach the <span class="gradient-text">production line</span>
+      </h1>
+
+      <p class="hero-sub">
+        QualityMind's AI monitors every stage of your manufacturing process in real time —
+        detecting anomalies, flagging failures, and learning from your data to prevent
+        costly recalls before they happen.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#" class="btn-hero-primary">
+          Start free trial
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#" class="btn-hero-secondary">
+          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Watch demo
+        </a>
+      </div>
+
+      <div class="hero-proof">
+        <div class="proof-avatars">
+          <span>JK</span>
+          <span>ML</span>
+          <span>SR</span>
+          <span>+</span>
+        </div>
+        <span class="proof-stars">★★★★★</span>
+        <span>Trusted by <strong style="color: var(--color-silver)">1,400+ engineers</strong> at industrial manufacturers</span>
+      </div>
+
+      <!-- Dashboard mockup -->
+      <div class="hero-mockup">
+        <div class="mockup-glow"></div>
+        <div class="mockup-frame">
+
+          <!-- Window chrome -->
+          <div class="mockup-topbar">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <div class="mockup-url-bar"></div>
+          </div>
+
+          <!-- App body -->
+          <div class="mockup-body">
+
+            <!-- Sidebar -->
+            <div class="mockup-sidebar">
+              <div class="sidebar-item active">
+                <span class="sidebar-icon"></span> Overview
+              </div>
+              <div class="sidebar-item">
+                <span class="sidebar-icon"></span> Defect Scanner
+              </div>
+              <div class="sidebar-item">
+                <span class="sidebar-icon"></span> Line Analytics
+              </div>
+              <div class="sidebar-item">
+                <span class="sidebar-icon"></span> Alerts
+              </div>
+              <div class="sidebar-item">
+                <span class="sidebar-icon"></span> Reports
+              </div>
+              <div class="sidebar-item">
+                <span class="sidebar-icon"></span> Integrations
+              </div>
+              <div class="sidebar-item" style="margin-top: auto;">
+                <span class="sidebar-icon"></span> Settings
+              </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="mockup-main">
+
+              <!-- Stat cards -->
+              <div class="stats-row">
+                <div class="stat-card">
+                  <div class="stat-label">DEFECT RATE</div>
+                  <div class="stat-value up">0.12%</div>
+                  <div class="stat-change">↓ 38% this week</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">INSPECTED TODAY</div>
+                  <div class="stat-value">84,391</div>
+                  <div class="stat-change" style="color: var(--color-sky)">↑ units</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">OPEN ANOMALIES</div>
+                  <div class="stat-value warn">7</div>
+                  <div class="stat-change" style="color: var(--color-amber)">2 critical</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">AI CONFIDENCE</div>
+                  <div class="stat-value up">98.7%</div>
+                  <div class="stat-change">model v4.2</div>
+                </div>
+              </div>
+
+              <!-- Chart -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <span class="chart-title">Defect detections — Line A, last 12h</span>
+                  <span class="chart-badge">Live</span>
+                </div>
+                <div class="fake-chart">
+                  <div class="bar" style="height:30%"></div>
+                  <div class="bar" style="height:55%"></div>
+                  <div class="bar" style="height:40%"></div>
+                  <div class="bar" style="height:75%"></div>
+                  <div class="bar" style="height:50%"></div>
+                  <div class="bar" style="height:35%"></div>
+                  <div class="bar" style="height:65%"></div>
+                  <div class="bar" style="height:45%"></div>
+                  <div class="bar" style="height:80%"></div>
+                  <div class="bar" style="height:60%"></div>
+                  <div class="bar" style="height:42%"></div>
+                  <div class="bar" style="height:28%"></div>
+                  <div class="bar" style="height:55%"></div>
+                  <div class="bar" style="height:70%"></div>
+                  <div class="bar" style="height:38%"></div>
+                  <div class="bar" style="height:48%"></div>
+                  <div class="bar" style="height:90%"></div>
+                  <div class="bar" style="height:55%"></div>
+                  <div class="bar" style="height:30%"></div>
+                  <div class="bar" style="height:20%"></div>
+                </div>
+              </div>
+
+              <!-- Alerts -->
+              <div class="alerts-row">
+                <div class="alert-item">
+                  <span class="alert-dot red"></span>
+                  <span class="alert-text">Surface scratch anomaly detected — Station 4B, Batch #8821</span>
+                  <span class="alert-time">2 min ago</span>
+                </div>
+                <div class="alert-item">
+                  <span class="alert-dot yellow"></span>
+                  <span class="alert-text">Tolerance drift on Assembly Robot 3 — review recommended</span>
+                  <span class="alert-time">18 min ago</span>
+                </div>
+                <div class="alert-item">
+                  <span class="alert-dot green"></span>
+                  <span class="alert-text">Line C inspection passed — 12,000 units cleared, zero defects</span>
+                  <span class="alert-time">41 min ago</span>
+                </div>
+              </div>
+
+            </div><!-- /mockup-main -->
+          </div><!-- /mockup-body -->
+        </div><!-- /mockup-frame -->
+      </div><!-- /hero-mockup -->
+    </div><!-- /hero-content -->
+  </section>
+
+  <!-- ── LOGOS STRIP ────────────────────────────────────────────── -->
+  <div class="logos-strip">
+    <span class="logos-label">Trusted by teams at</span>
+    <span class="logo-pill">SIEMENS</span>
+    <span class="logo-pill">BOSCH</span>
+    <span class="logo-pill">CATERPILLAR</span>
+    <span class="logo-pill">HONEYWELL</span>
+    <span class="logo-pill">3M</span>
+    <span class="logo-pill">ABB</span>
+  </div>
+
+</body>
+</html>
