@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create your NEAR Verified Account</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #0D0D0D;
+      --white:       #FFFFFF;
+      --yellow:      #F5E642;
+      --yellow-dark: #E8D800;
+      --bg:          #F2EFE6;
+      --hero-top:    #EDE99A;
+      --hero-bot:    #F2EFE6;
+      --gray-text:   #555555;
+      --border:      #D8D4C8;
+      --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-divider {
+      color: #999;
+      font-weight: 300;
+      margin: 0 2px;
+    }
+
+    .nav-label {
+      font-weight: 500;
+      font-size: 16px;
+      color: var(--black);
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--black);
+      transition: background 0.15s;
+    }
+
+    .btn-icon:hover { background: rgba(0,0,0,0.05); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(180deg, var(--hero-top) 0%, var(--hero-bot) 100%);
+      padding: 52px 40px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dot grid decoration */
+    .dots {
+      position: absolute;
+      top: 60px;
+      right: 80px;
+      display: grid;
+      grid-template-columns: repeat(8, 14px);
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    .dots span {
+      width: 5px;
+      height: 5px;
+      background: var(--black);
+      border-radius: 50%;
+      opacity: 0.25;
+      display: block;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      background: var(--yellow);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 28px;
+    }
+
+    .hero-badge svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .hero-title {
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      color: var(--black);
+      max-width: 640px;
+      margin: 0 auto 18px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--gray-text);
+      max-width: 520px;
+      margin: 0 auto 12px;
+      line-height: 1.6;
+    }
+
+    .hero-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      color: var(--gray-text);
+      margin-bottom: 44px;
+    }
+
+    .hero-time svg {
+      width: 15px;
+      height: 15px;
+      opacity: 0.6;
+    }
+
+    /* ── STEPS CARD ── */
+    .steps-card {
+      background: var(--white);
+      border-radius: 18px;
+      border: 1px solid rgba(0,0,0,0.08);
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 36px 40px 40px;
+      text-align: left;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+    }
+
+    .steps-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+
+    .step-num-wrap {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 1.5px;
+      background: var(--border);
+      margin: 0 12px;
+    }
+
+    .steps-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .step-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .step-title svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .step-desc {
+      font-size: 13.5px;
+      color: var(--gray-text);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .btn-connect {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 20px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .btn-connect:hover { opacity: 0.82; transform: translateY(-1px); }
+
+    .btn-connect-icon {
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--black);
+      flex-shrink: 0;
+    }
+
+    /* ── Q&A ── */
+    .qa-section {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 72px 40px 64px;
+      flex: 1;
+    }
+
+    .qa-title {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      margin-bottom: 40px;
+      color: var(--black);
+    }
+
+    .qa-list { border-top: 1px solid var(--border); }
+
+    .qa-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .qa-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 0;
+      font-size: 15.5px;
+      font-weight: 600;
+      color: var(--black);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      gap: 16px;
+    }
+
+    .qa-question:hover { color: #333; }
+
+    .qa-chevron {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      transition: transform 0.2s;
+      color: var(--gray-text);
+    }
+
+    .qa-item.open .qa-chevron { transform: rotate(180deg); }
+
+    .qa-answer {
+      display: none;
+      font-size: 14px;
+      color: var(--gray-text);
+      line-height: 1.7;
+      padding-bottom: 20px;
+    }
+
+    .qa-item.open .qa-answer { display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 40px;
+    }
+
+    .footer-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .footer-copy a {
+      color: #999;
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--gray-text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover { color: var(--black); }
+
+    .footer-dot {
+      color: #bbb;
+      font-size: 13px;
+    }
+
+    .footer-gh {
+      width: 20px;
+      height: 20px;
+      color: var(--gray-text);
+    }
+
+    .footer-gh:hover { color: var(--black); }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <!-- NEAR logo mark -->
+      <svg class="nav-logo-icon" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="6" fill="#000"/>
+        <text x="6" y="22" font-family="Arial" font-size="14" font-weight="900" fill="white">N</text>
+      </svg>
+      <span style="font-weight:700">near</span>
+      <span class="nav-divider">&nbsp;|&nbsp;</span>
+      <span class="nav-label">Citizens House</span>
+    </a>
+
+    <button class="btn-icon" aria-label="Toggle dark mode">
+      <!-- Crescent moon icon -->
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <!-- Decorative dot grid -->
+    <div class="dots">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="hero-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Identity Verification
+    </div>
+
+    <h1 class="hero-title">
+      Create your<br/>NEAR Verified Account
+    </h1>
+
+    <p class="hero-sub">
+      Verify your account to participate in NEAR governance with enhanced trust and credibility.
+    </p>
+
+    <div class="hero-time">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      Takes less than 7 minutes
+    </div>
+
+    <!-- Steps card -->
+    <div class="steps-card">
+      <!-- Step numbers + connector -->
+      <div class="steps-header">
+        <div class="step-num-wrap">
+          <div class="step-num">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-num">2</div>
+      </div>
+
+      <!-- Step content -->
+      <div class="steps-body">
+        <div>
+          <div class="step-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+            </svg>
+            Verify NEAR Wallet
+          </div>
+          <p class="step-desc">First, connect your NEAR wallet to begin the identity verification process</p>
+          <a href="#" class="btn-connect">
+            <div class="btn-connect-icon">N</div>
+            Connect Wallet
+          </a>
+        </div>
+
+        <div>
+          <div class="step-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7 21v-2a5 5 0 0 1 10 0v2"/>
+            </svg>
+            Verify Identity
+          </div>
+          <p class="step-desc">Upload your ID document and pass a liveness check to verify your unique identity</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Q&A ── -->
+  <section class="qa-section">
+    <h2 class="qa-title">Q&A</h2>
+
+    <div class="qa-list">
+      <div class="qa-item open">
+        <button class="qa-question" onclick="toggle(this)">
+          Why create a NEAR Verified Account?
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="qa-answer">
+          A NEAR Verified Account gives you enhanced credibility and trust within the NEAR governance ecosystem. It ensures that each participant is a unique human, preventing Sybil attacks and ensuring fair representation in governance decisions.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggle(this)">
+          What do I need to be eligible?
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="qa-answer">
+          You need a valid NEAR wallet and a government-issued ID document. You must also be able to complete a liveness check using your device camera.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggle(this)">
+          What sort of ID document can I use?
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="qa-answer">
+          Accepted documents include national ID cards, passports, and driver's licenses issued by your country. The document must be valid and not expired.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggle(this)">
+          Is my personal information kept private?
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="qa-answer">
+          Yes. Your personal data is processed by our identity verification partner and is never stored on-chain. Only a cryptographic proof of your uniqueness is associated with your wallet.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggle(this)">
+          What happens if I don't complete verification?
+          <svg class="qa-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="qa-answer">
+          You can still use NEAR, but certain governance features and Citizens House participation may require a verified account. Verification can be completed at any time.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy">
+        © 2026 Hack Humanity.
+        <a href="#">MIT License</a>
+      </span>
+
+      <div class="footer-links">
+        <a href="#">Citizens</a>
+        <span class="footer-dot">·</span>
+        <a href="#">Support</a>
+        <span class="footer-dot">·</span>
+        <a href="#">Terms of Use</a>
+        <span class="footer-dot">·</span>
+        <a href="#">Privacy Policy</a>
+        <span class="footer-dot">·</span>
+        <a href="#">Built by HackHumanity</a>
+        <span class="footer-dot">·</span>
+        <a href="#" aria-label="GitHub">
+          <svg class="footer-gh" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggle(btn) {
+      const item = btn.closest('.qa-item');
+      item.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
